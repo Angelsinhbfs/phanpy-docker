@@ -1,0 +1,14 @@
+services:
+  phanpy-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      #args:
+        #PHANPY_CLIENT_NAME:
+        #PHANPY_DEFAULT_INSTANCE: 
+        #PHANPY_DEFAULT_INSTANCE_REGISTRATION_URL: https://
+        #PHANPY_PRIVACY_POLICY_URL: https://
+        #PHANPY_WEBSITE:
+    ports:
+      - "8200:80"
+    restart: unless-stopped
