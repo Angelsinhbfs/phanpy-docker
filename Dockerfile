@@ -1,8 +1,7 @@
-# Use the official Node.js image as the base image
-FROM node:18
+FROM node:18-alpine AS build
 
 # Install Git
-RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache git
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -28,8 +27,14 @@ RUN npm install
 # Build the application
 RUN npm run build
 
+# Stage 2: Serve the application using Nginx
+FROM nginx:alpine
+
+# Copy the built files from the previous stage
+COPY --from=build /app/build /usr/share/nginx/html
+
 # Expose the port the app runs on (if known, otherwise adjust accordingly)
 EXPOSE 80
 
 # Command to run the application
-CMD ["npm", "start"]
+CMD ["nginx", "-g", "daemon off;"]
